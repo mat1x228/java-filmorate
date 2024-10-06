@@ -16,7 +16,6 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api")
 @Slf4j
 @Validated
 public class UserController {
@@ -24,7 +23,7 @@ public class UserController {
     private UserServiceImpl userServiceImpl = new UserServiceImpl();
 
 
-    @PostMapping("/user")
+    @PostMapping("/users")
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
         log.info("Создание юзера");
         User userCreated = userServiceImpl.createUser(user);
@@ -39,7 +38,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/user/{userId}")
+    @PutMapping("/users/{userId}")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
         log.info("Обновление юзера с ID: {}", user.getId());
         User userUpdated = userServiceImpl.updateUser(user);

@@ -16,7 +16,6 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/api")
 @Validated
 public class FilmController {
 
@@ -29,7 +28,7 @@ public class FilmController {
         return films;
     }
 
-    @PostMapping("/film")
+    @PostMapping("/films")
     public ResponseEntity<Film> createFilm(@Valid @RequestBody Film film) {
         Film createdFilm = filmServiceImpl.createFilm(film);
 
@@ -46,7 +45,7 @@ public class FilmController {
     }
 
 
-    @PutMapping("/film/{id}")
+    @PutMapping("/films/{id}")
     public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
         log.info("Обновление фильма с ID: {}", film.getId());
         Film filmUpdated = filmServiceImpl.updateFilm(film);
