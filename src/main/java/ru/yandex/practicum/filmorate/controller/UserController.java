@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public Collection<User> getUsers(){
+    public Collection<User> getUsers() {
         log.info("Получение всех юзеров");
         List<User> users = new ArrayList<>(userServiceImpl.getUsers());
         log.debug("Количество пользователей: " + userServiceImpl.getUsers().size());
