@@ -14,14 +14,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 @RestController
 @Slf4j
 @Validated
 public class UserController {
 
     private UserServiceImpl userServiceImpl = new UserServiceImpl();
-
 
     @PostMapping("/users")
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
