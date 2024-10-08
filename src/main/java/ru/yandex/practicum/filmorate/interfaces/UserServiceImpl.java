@@ -17,13 +17,12 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
         final int userId = USER_ID_HOLDER.incrementAndGet();
         user.setId(userId);
-        if (user.getName() == null || user.getName().isEmpty()){
-            user.setName(user.getLogin());
-        } else {
-            userStorage.put(userId, user);
-        }
-        return userStorage.get(userId);
+        String userName = user.getName() != null && !user.getName().isEmpty() ? user.getName() : user.getLogin();
+        user.setName(userName);
+        userStorage.put(userId, user);
+        return user;
     }
+
 
     @Override
     public List<User> getUsers() {

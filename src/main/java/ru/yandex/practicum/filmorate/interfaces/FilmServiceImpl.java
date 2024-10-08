@@ -16,9 +16,10 @@ public class FilmServiceImpl implements FilmService {
 
 
     public  Film createFilm(Film film) {
-        int id = FILM_ID_HOLDER.incrementAndGet();
-        filmStorage.put(id, film);
-        return filmStorage.get(id);
+        final int filmId = FILM_ID_HOLDER.incrementAndGet();
+        film.setId(filmId);
+        filmStorage.put(filmId, film);
+        return filmStorage.get(filmId);
     }
 
     @Override
