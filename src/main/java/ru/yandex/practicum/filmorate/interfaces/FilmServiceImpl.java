@@ -22,12 +22,6 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> getFilms() {
-        Collection<Film> values = filmStorage.values();
-        return new ArrayList<>(values);
-    }
-
-    @Override
     public Film updateFilm(Film film) {
         if (filmStorage.containsKey(film.getId())) {
             filmStorage.put(film.getId(), film);
@@ -36,4 +30,11 @@ public class FilmServiceImpl implements FilmService {
             return null;
         }
     }
+
+    @Override
+    public List<Film> getFilms() {
+        Collection<Film> values = filmStorage.values();
+        return new ArrayList<>(values);
+    }
+
 }
