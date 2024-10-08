@@ -37,25 +37,24 @@ public class UserController {
     }
 
     @PutMapping
-public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
-    log.info("Обновление юзера с ID: {}", user.getId());
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
+        log.info("Обновление юзера с ID: {}", user.getId());
 
-    User userUpdated = userServiceImpl.updateUser(user);
+        User userUpdated = userServiceImpl.updateUser(user);
 
-    if (userUpdated != null) {
-        log.info("Юзер обновлен: {}", userUpdated);
-        log.trace("Имя пользователя: {}, Емайл пользователя: {}, Логин пользователя: {}, Дата рождения: {}",
-                userUpdated.getName(), userUpdated.getEmail(), userUpdated.getLogin(), userUpdated.getBirthday());
-        return ResponseEntity.ok().body(userUpdated);
-    } else {
-        log.error("Юзер с ID: {} не найден", user.getId());
-        User notFoundUser = new User();
-        notFoundUser.setId(user.getId());
-        notFoundUser.setName("Пользователь не найден");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundUser);
+        if (userUpdated != null) {
+            log.info("Юзер обновлен: {}", userUpdated);
+            log.trace("Имя пользователя: {}, Емайл пользователя: {}, Логин пользователя: {}, Дата рождения: {}",
+                    userUpdated.getName(), userUpdated.getEmail(), userUpdated.getLogin(), userUpdated.getBirthday());
+            return ResponseEntity.ok().body(userUpdated);
+        } else {
+            log.error("Юзер с ID: {} не найден", user.getId());
+            User notFoundUser = new User();
+            notFoundUser.setId(user.getId());
+            notFoundUser.setName("Пользователь не найден");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundUser);
+        }
     }
-}
-
 
 
     @GetMapping

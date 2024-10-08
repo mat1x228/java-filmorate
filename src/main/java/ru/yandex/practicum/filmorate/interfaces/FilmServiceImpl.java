@@ -15,7 +15,7 @@ public class FilmServiceImpl implements FilmService {
     private static final AtomicInteger FILM_ID_HOLDER = new AtomicInteger();
 
 
-    public  Film createFilm(Film film) {
+    public Film createFilm(Film film) {
         final int filmId = FILM_ID_HOLDER.incrementAndGet();
         film.setId(filmId);
         filmStorage.put(filmId, film);
@@ -30,7 +30,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public Film updateFilm(Film film) {
-        if(filmStorage.containsKey(film.getId())) {
+        if (filmStorage.containsKey(film.getId())) {
             Integer filmId = film.getId();
             filmStorage.remove(film.getId());
             filmStorage.put(filmId, film);

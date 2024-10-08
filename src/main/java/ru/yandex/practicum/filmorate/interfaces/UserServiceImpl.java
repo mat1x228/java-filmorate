@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        if(userStorage.containsKey(user.getId())) {
+        if (userStorage.containsKey(user.getId())) {
             Integer userId = user.getId();
             userStorage.remove(user.getId());
             userStorage.put(userId, user);
