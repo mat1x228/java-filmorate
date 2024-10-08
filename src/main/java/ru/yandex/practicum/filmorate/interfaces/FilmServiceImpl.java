@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FilmServiceImpl implements FilmService {
 
-    private static HashMap<Integer, Film> filmStorage = new HashMap<Integer, Film>();
+    private static final HashMap<Integer, Film> filmStorage = new HashMap<>();
 
     private static final AtomicInteger FILM_ID_HOLDER = new AtomicInteger();
 
