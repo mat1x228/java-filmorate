@@ -11,10 +11,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FilmServiceImpl implements FilmService {
 
     private static final HashMap<Integer, Film> filmStorage = new HashMap<>();
-
     private static final AtomicInteger FILM_ID_HOLDER = new AtomicInteger();
 
-
+    @Override
     public Film createFilm(Film film) {
         final int filmId = FILM_ID_HOLDER.incrementAndGet();
         film.setId(filmId);
@@ -30,15 +29,12 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public Film updateFilm(Film film) {
-        if  (filmStorage.containsKey(film.getId())) {
+        if (filmStorage.containsKey(film.getId())) {
             Integer filmId = film.getId();
-            filmStorage.remove(filmId);
             filmStorage.put(filmId, film);
             return filmStorage.get(filmId);
         } else {
             return null;
         }
     }
-
-
 }
