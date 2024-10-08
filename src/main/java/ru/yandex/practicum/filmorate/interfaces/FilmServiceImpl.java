@@ -29,15 +29,15 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-public Film updateFilm(Film film) {
-    if (filmStorage.containsKey(film.getId())) {
-        Integer filmId = film.getId();
-        filmStorage.remove(filmId);
-        filmStorage.put(filmId, film);
-        return filmStorage.get(filmId);
+    public Film updateFilm(Film film) {
+        if (filmStorage.containsKey(film.getId())) {
+            Integer filmId = film.getId();
+            filmStorage.remove(filmId);
+            filmStorage.put(filmId, film);
+            return filmStorage.get(filmId);
+        }
+        return null;
     }
-    return null;
-}
 
 
 }
