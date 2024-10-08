@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class FilmorateApplicationTests {
+class FilmorateApplicationTest {
 
     @Mock
     private FilmServiceImpl filmServiceImpl;
