@@ -10,32 +10,31 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FilmServiceImpl implements FilmService {
 
-    private static HashMap<Integer, Film> filmStorage = new HashMap<Integer, Film>();
-
+    private static final HashMap<Integer, Film> filmStorage = new HashMap<>();
     private static final AtomicInteger FILM_ID_HOLDER = new AtomicInteger();
 
+    @Override
+    public Film createFilm(Film film) {
+        final int filmId = FILM_ID_HOLDER.incrementAndGet();
+        film.setId(filmId);
+        filmStorage.put(filmId, film);
+        return filmStorage.get(filmId);
+    }
 
-    public  Film createFilm(Film film) {
-        int id = FILM_ID_HOLDER.incrementAndGet();
-        filmStorage.put(id, film);
-        return filmStorage.get(id);
+    @Override
+    public Film updateFilm(Film film) {
+        if (filmStorage.containsKey(film.getId())) {
+            filmStorage.put(film.getId(), film);
+            return filmStorage.get(film.getId());
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<Film> getFilms() {
         Collection<Film> values = filmStorage.values();
         return new ArrayList<>(values);
-    }
-
-    @Override
-    public Film updateFilm(Film film) {
-        if(filmStorage.containsKey(film.getId())) {
-            Integer filmId = film.getId();
-            filmStorage.remove(film.getId());
-            filmStorage.put(filmId, film);
-            return filmStorage.get(filmId);
-        }
-        return null;
     }
 
 }
