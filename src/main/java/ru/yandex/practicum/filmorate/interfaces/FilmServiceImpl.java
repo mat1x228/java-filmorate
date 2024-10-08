@@ -30,9 +30,8 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public Film updateFilm(Film film) {
         if (filmStorage.containsKey(film.getId())) {
-            Integer filmId = film.getId();
-            filmStorage.put(filmId, film);
-            return filmStorage.get(filmId);
+            filmStorage.put(film.getId(), film);
+            return filmStorage.get(film.getId());
         } else {
             return null;
         }
