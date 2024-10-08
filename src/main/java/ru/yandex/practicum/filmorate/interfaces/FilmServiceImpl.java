@@ -35,9 +35,11 @@ public class FilmServiceImpl implements FilmService {
             filmStorage.remove(filmId);
             filmStorage.put(filmId, film);
             return filmStorage.get(filmId);
+        } else {
+            return null;
         }
-        return null;
     }
+
 
 
 }
