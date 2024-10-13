@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class User {
 
-    private Integer id;
+    private Integer id;//id
     @NotBlank(message = "Email не может быть пустым.")
     @Email(message = "Неверный формат email")
     private String email;
