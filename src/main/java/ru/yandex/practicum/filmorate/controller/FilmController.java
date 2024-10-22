@@ -1,16 +1,17 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.interfaces.FilmServiceImpl;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.List;
 
 
 @RestController
@@ -19,27 +20,27 @@ import java.util.List;
 @RequestMapping("/films")
 public class FilmController {
 
-    private FilmServiceImpl filmServiceImpl = new FilmServiceImpl();
+    private final FilmServiceImpl filmServiceImpl;
+
+    @Autowired
+    public FilmController(FilmServiceImpl filmServiceImpl) {
+        this.filmServiceImpl = filmServiceImpl;
+    }
 
     @GetMapping
     public Collection<Film> getAllFilms() {
-        log.info("Получение всех фильмов: " + filmServiceImpl.getFilms().size());
-        List<Film> films = filmServiceImpl.getFilms();
-        return films;
+        log.info("Получение всех фильмов");
+        return filmServiceImpl.getFilms();
     }
 
     @PostMapping
     public ResponseEntity<Film> createFilm(@Valid @RequestBody Film film) {
         Film createdFilm = filmServiceImpl.createFilm(film);
-
+        log.info("Создание фильма");
         if (createdFilm == null) {
             log.error("Фильм не был создан");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createdFilm);
+            throw new ValidationException("Не удалось создать фильм");
         }
-
-        log.info("Фильм создан: {}", film.getName());
-        log.trace("Название фильма: {}, Описание фильма: {}, Дата выхода фильма: {}, Продолжительность фильма: {}",
-                film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration());
 
         return ResponseEntity.ok().body(createdFilm);
     }
@@ -50,14 +51,10 @@ public class FilmController {
         log.info("Обновление фильма с ID: {}", film.getId());
         Film filmUpdated = filmServiceImpl.updateFilm(film);
         if (filmUpdated != null) {
-            log.trace("Название фильма: {}, Описание фильма: {}, Дата выхода фильма: {}, Продолжительность фильма: {}",
-                    film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration());
             return ResponseEntity.ok().body(filmUpdated);
         } else {
             log.error("Фильм с ID: {} не найден или не удалось обновить", film.getId());
-            Film notFoundFilm = new Film();
-            notFoundFilm.setName("Фильм не существует");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundFilm);
+            throw new NotFoundException("Фильм: " + film.getId() + " не найден");
         }
     }
 

@@ -1,6 +1,6 @@
-package ru.yandex.practicum.filmorate.utils;
+package ru.yandex.practicum.filmorate.validator;
 
-import ru.yandex.practicum.filmorate.annotations.ReleaseDate;
+import ru.yandex.practicum.filmorate.annotation.validation.ReleaseDate;
 
 import java.time.LocalDate;
 
