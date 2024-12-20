@@ -11,7 +11,9 @@ import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FilmServiceImpl;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.impl.InMemoryFilmStorage;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -25,7 +27,10 @@ import static org.mockito.Mockito.*;
 class FilmorateApplicationTests {
 
     @Mock
-    private FilmStorage filmStorage;
+    private InMemoryFilmStorage filmStorage;
+
+    @Mock
+    private FilmServiceImpl filmService;
 
     @InjectMocks
     private FilmController filmController;
@@ -49,10 +54,8 @@ class FilmorateApplicationTests {
 
     @Test
     void testGetAllFilms() {
-        Set<Integer> firstLikes = new HashSet<>();
-        Set<Integer> secondLikes = new HashSet<>();
-        Film film1 = new Film(1, "Film 1", "Description 1", LocalDate.of(2022, 1, 1), 120, firstLikes);
-        Film film2 = new Film(2, "Film 2", "Description 2", LocalDate.of(2022, 2, 1), 130, secondLikes);
+        Film film1 = new Film(1, "Film 1", "Description 1", LocalDate.of(2022, 1, 1), 120, null);
+        Film film2 = new Film(2, "Film 2", "Description 2", LocalDate.of(2022, 2, 1), 130, null);
         when(filmStorage.getFilms()).thenReturn(Arrays.asList(film1, film2));
 
         Collection<Film> result = filmController.getAllFilms();
@@ -110,7 +113,7 @@ class FilmorateApplicationTests {
         when(filmStorage.getFilmById(film1.getId())).thenReturn(film1);
         when(filmStorage.getFilmById(film2.getId())).thenReturn(film2);
 
-        ResponseEntity<Collection<Film>> response = filmController.getMostPopularFilms(2);
+        ResponseEntity<Collection<Film>> response = filmController.getMostPopularFilms(1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
