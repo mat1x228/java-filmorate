@@ -1,15 +1,17 @@
-package ru.yandex.practicum.filmorate.interfaces;
+package ru.yandex.practicum.filmorate.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Component
 @Slf4j
-@Service
-public class UserServiceImpl implements UserService {
+public class InMemoryUserStorage implements UserStorage {
 
     private static final Map<Integer, User> userStorage = new HashMap<>();
 
@@ -17,6 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        log.info("Создание нового юзера");
         final int userId = USER_ID_HOLDER.incrementAndGet();
         user.setId(userId);
 
@@ -38,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsers() {
+        log.info("Получение всех юзеров");
         Collection<User> values = userStorage.values();
         log.debug("Количество пользователей: " + values.size());
         return new ArrayList<>(values);
@@ -45,6 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
+        log.info("Обновление юзера с ID: {}", user.getId());
         if (userStorage.containsKey(user.getId()) && user.getId() > 0) {
             Integer userId = user.getId();
             userStorage.remove(user.getId());
@@ -55,5 +60,17 @@ public class UserServiceImpl implements UserService {
             return userStorage.get(userId);
         }
         return null;
+    }
+
+    @Override
+    public User getUserById(int id) {
+        log.info("Получение юзера с ID: {}", id);
+
+        User user = userStorage.get(id);
+        if (user == null) {
+            throw new NotFoundException("Пользователь с таким id не найден");
+        }
+
+        return user;
     }
 }

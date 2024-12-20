@@ -8,12 +8,12 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.interfaces.UserServiceImpl;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserServiceImpl;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,6 +23,9 @@ class UserControllerTest {
 
     @Mock
     private UserServiceImpl userServiceImpl;
+
+    @Mock
+    private UserStorage userStorage;
 
     @InjectMocks
     private UserController userController;
@@ -34,14 +37,16 @@ class UserControllerTest {
     @SuppressWarnings("resource")
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        user1 = new User(1, "John Doe", "john.doe@example.com", "johndoe", LocalDate.of(1990, 1, 1));
-        user2 = new User(2, "Jane Smith", "jane.smith@example.com", "janesmith", LocalDate.of(1985, 5, 15));
+        Set<Integer> friendsSetForFirstUser = new HashSet<>();
+        Set<Integer> friendsSetForSecondUser = new HashSet<>();
+        user1 = new User(1, "John Doe", "john.doe@example.com", "johndoe", LocalDate.of(1990, 1, 1), friendsSetForFirstUser);
+        user2 = new User(2, "Jane Smith", "jane.smith@example.com", "janesmith", LocalDate.of(1985, 5, 15), friendsSetForSecondUser);
     }
 
 
     @Test
-    void testGetUsers_whenUsersExist_returnsUsers() {
-        when(userServiceImpl.getUsers()).thenReturn(Arrays.asList(user1, user2));
+    void getUsersTest() {
+        when(userStorage.getUsers()).thenReturn(Arrays.asList(user1, user2));
 
         Collection<User> users = userController.getUsers();
 
@@ -51,8 +56,8 @@ class UserControllerTest {
     }
 
     @Test
-    void testAddUser_whenUserIsValid_returnsCreatedUser() {
-        when(userServiceImpl.createUser(any(User.class))).thenReturn(user1);
+    void addValidUserTest() {
+        when(userStorage.createUser(any(User.class))).thenReturn(user1);
 
         ResponseEntity<User> responseEntity = userController.addUser(user1);
 
@@ -60,5 +65,36 @@ class UserControllerTest {
         assertEquals(user1, responseEntity.getBody());
     }
 
+    @Test
+    void addFriendTest() {
+        when(userStorage.getUserById(user1.getId())).thenReturn(user1);
+        when(userStorage.getUserById(user2.getId())).thenReturn(user2);
 
+        ResponseEntity<Void> responseEntity = userController.addFriend(user1.getId(), user2.getId());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void deleteFromFriends() {
+        when(userStorage.getUserById(user1.getId())).thenReturn(user1);
+        when(userStorage.getUserById(user2.getId())).thenReturn(user2);
+
+        ResponseEntity<Void> responseEntity = userController.deleteFriend(user1.getId(), user2.getId());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void getCommonFriendsListTest() {
+        when(userStorage.getUserById(user1.getId())).thenReturn(user1);
+        when(userStorage.getUserById(user2.getId())).thenReturn(user2);
+
+        userController.addFriend(user1.getId(), user2.getId());
+
+        ResponseEntity<List<User>> responseEntity = userController.getCommonFriendsList(user1.getId(), user2.getId());
+
+        assertNotNull(responseEntity.getBody());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
 }
