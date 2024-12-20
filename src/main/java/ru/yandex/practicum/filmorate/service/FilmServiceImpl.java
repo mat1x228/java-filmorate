@@ -20,7 +20,7 @@ public class FilmServiceImpl implements FilmService {
     InMemoryUserStorage userStorage;
 
     @Autowired
-    public FilmServiceImpl(InMemoryFilmStorage filmStorage,InMemoryUserStorage userStorage) {
+    public FilmServiceImpl(InMemoryFilmStorage filmStorage, InMemoryUserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
