@@ -6,12 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmServiceImpl;
-import ru.yandex.practicum.filmorate.service.UserServiceImpl;
-import ru.yandex.practicum.filmorate.storage.impl.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -24,40 +21,40 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class FilmController {
 
-    private final FilmServiceImpl filmServiceImpl;
-    private final UserServiceImpl userServiceImpl;
+    @Autowired
+    private final FilmService filmService;
 
 
     @GetMapping
     public Collection<Film> getAllFilms() {
-        return filmServiceImpl.getFilms();
+        return filmService.getFilms();
     }
 
     @PostMapping
     public ResponseEntity<Film> createFilm(@Valid @RequestBody Film film) {
-        return ResponseEntity.ok().body(filmServiceImpl.createFilm(film));
+        return ResponseEntity.ok().body(filmService.createFilm(film));
     }
 
 
     @PutMapping
     public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
-            return ResponseEntity.ok().body(filmServiceImpl.updateFilm(film));
+        return ResponseEntity.ok().body(filmService.updateFilm(film));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Film> getFilmById(@PathVariable int id) {
-        return ResponseEntity.ok().body(filmServiceImpl.getFilmById(id));
+        return ResponseEntity.ok().body(filmService.getFilmById(id));
     }
 
     @PutMapping("/{id}/like/{userId}")
     public ResponseEntity<Void> likeFilm(@PathVariable int id, @PathVariable int userId) {
-        filmServiceImpl.addLike(id, userId);
+        filmService.addLike(id, userId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public ResponseEntity<Void> unlikeFilm(@PathVariable int id, @PathVariable int userId) {
-        filmServiceImpl.removeLike(id, userId);
+        filmService.removeLike(id, userId);
         return ResponseEntity.ok().build();
     }
 
@@ -66,7 +63,7 @@ public class FilmController {
         if (count <= 0) {
             throw new ValidationException("Значение size должно быть больше нуля");
         }
-        return ResponseEntity.ok().body(filmServiceImpl.getMostPopularFilms(count));
+        return ResponseEntity.ok().body(filmService.getMostPopularFilms(count));
     }
 
 }

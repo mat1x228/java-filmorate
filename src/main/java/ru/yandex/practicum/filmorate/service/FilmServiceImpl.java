@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -11,8 +10,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
-import ru.yandex.practicum.filmorate.storage.impl.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.impl.InMemoryUserStorage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +19,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FilmServiceImpl implements FilmService {
 
+    @Autowired
     private final FilmStorage filmStorage;
+    @Autowired
     private final UserStorage userStorage;
 
     public void addLike(int filmId, int userId) {
@@ -88,7 +87,7 @@ public class FilmServiceImpl implements FilmService {
     public Film getFilmById(int id) {
         Film film = filmStorage.getFilmById(id);
         if (film != null) {
-            return filmStorage.getFilmById(id);
+            return film;
         } else {
             log.error("Фильм с ID: {} не найден", id);
             throw new NotFoundException("Фильм с ID: " + id + " не найден");
