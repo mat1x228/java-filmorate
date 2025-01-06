@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,60 +21,31 @@ import java.util.List;
 @Slf4j
 @Validated
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
     private final FilmServiceImpl filmServiceImpl;
-    private final UserStorage userStorage;
-
-    @Autowired
-    public UserController(UserServiceImpl userServiceImpl, FilmServiceImpl filmServiceImpl,
-                          UserStorage userStorage) {
-        this.userServiceImpl = userServiceImpl;
-        this.filmServiceImpl = filmServiceImpl;
-        this.userStorage = userStorage;
-    }
 
     @PostMapping
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-        User userCreated = userStorage.createUser(user);
-        if (userCreated != null) {
-            return ResponseEntity.ok().body(userCreated);
-        } else {
-            log.error("Не удалось создать юзера");
-            throw new ValidationException("Не удалось создать юзера");
-        }
+        return ResponseEntity.ok().body(userServiceImpl.createUser(user));
     }
 
     @PutMapping
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
-
-
-        User userUpdated = userStorage.updateUser(user);
-        if (userUpdated != null) {
-            return ResponseEntity.ok().body(userUpdated);
-        } else {
-            log.error("Юзер с ID: {} не найден", user.getId());
-            throw new NotFoundException("Юзер с ID: " + user.getId() + " не найден");
-        }
+        return ResponseEntity.ok().body(userServiceImpl.updateUser(user));
     }
 
 
     @GetMapping
     public Collection<User> getUsers() {
-        return userStorage.getUsers();
+        return userServiceImpl.getUsers();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
-        User user = userStorage.getUserById(id);
-
-        if (user != null) {
-            return ResponseEntity.ok().body(user);
-        } else {
-            log.error("Юзер с ID: {} не найден", id);
-            throw new NotFoundException("Юзер с ID: " + id + " не найден");
-        }
+        return ResponseEntity.ok().body(userServiceImpl.getUserById(id));
     }
 
     @PutMapping("/{id}/friends/{friendId}")

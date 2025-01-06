@@ -12,4 +12,12 @@ public interface FilmService {
 
     List<Film> getMostPopularFilms(int limit);
 
+    Film createFilm(Film film);
+
+    List<Film> getFilms();
+
+    Film updateFilm(Film film);
+
+    Film getFilmById(int id);
+
 }

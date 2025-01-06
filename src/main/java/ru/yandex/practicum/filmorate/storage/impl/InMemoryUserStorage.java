@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -11,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class InMemoryUserStorage implements UserStorage {
 
     private static final Map<Integer, User> userStorage = new HashMap<>();

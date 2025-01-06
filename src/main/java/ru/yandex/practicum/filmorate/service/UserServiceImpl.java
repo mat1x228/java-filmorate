@@ -1,11 +1,14 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.impl.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +16,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-    InMemoryUserStorage userStorage;
-
-    @Autowired
-    public UserServiceImpl(InMemoryUserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
+    private UserStorage userStorage;
 
     public void addFriend(int userId, int userFriendId) {
         log.info("Добавление друга с ID: {} к юзеру с ID: {}", userFriendId, userId);
@@ -83,6 +81,40 @@ public class UserServiceImpl implements UserService {
         } else {
             log.error("Юзер с ID: {} не найден", userId);
             throw new NotFoundException("Юзер с ID: " + userId + " не найден");
+        }
+    }
+    public User createUser(User user){
+        User userCreated = userStorage.createUser(user);
+        if (userCreated != null) {
+            return userCreated;
+        } else {
+            log.error("Не удалось создать юзера");
+            throw new ValidationException("Не удалось создать юзера");
+        }
+    }
+
+    public List<User> getUsers(){
+        return userStorage.getUsers();
+    }
+
+    public User updateUser(User user){
+        User userUpdated = userStorage.updateUser(user);
+        if (userUpdated != null) {
+            return userUpdated;
+        } else {
+            log.error("Юзер с ID: {} не найден", user.getId());
+            throw new NotFoundException("Юзер с ID: " + user.getId() + " не найден");
+        }
+    }
+
+    public User getUserById(int id){
+        User user = userStorage.getUserById(id);
+
+        if (user != null) {
+            return user;
+        } else {
+            log.error("Юзер с ID: {} не найден", id);
+            throw new NotFoundException("Юзер с ID: " + id + " не найден");
         }
     }
 

@@ -1,11 +1,16 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.storage.impl.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.impl.InMemoryUserStorage;
 
@@ -14,16 +19,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FilmServiceImpl implements FilmService {
 
-    InMemoryFilmStorage filmStorage;
-    InMemoryUserStorage userStorage;
-
-    @Autowired
-    public FilmServiceImpl(InMemoryFilmStorage filmStorage, InMemoryUserStorage userStorage) {
-        this.filmStorage = filmStorage;
-        this.userStorage = userStorage;
-    }
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
 
     public void addLike(int filmId, int userId) {
         Film film = filmStorage.getFilmById(filmId);
@@ -59,6 +59,40 @@ public class FilmServiceImpl implements FilmService {
                 .sorted((f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size()))
                 .limit(count)
                 .collect(Collectors.toList());
+    }
+
+    public Film createFilm(Film film) {
+        Film createdFilm = filmStorage.createFilm(film);
+        if (createdFilm == null) {
+            log.error("Фильм не был создан");
+            throw new ValidationException("Не удалось создать фильм");
+        }
+
+        return createdFilm;
+    }
+
+    public List<Film> getFilms() {
+        return filmStorage.getFilms();
+    }
+
+    public Film updateFilm(Film film) {
+        Film filmUpdated = filmStorage.updateFilm(film);
+        if (filmUpdated != null) {
+            return filmUpdated;
+        } else {
+            log.error("Фильм с ID: {} не найден или не удалось обновить", film.getId());
+            throw new NotFoundException("Фильм: " + film.getId() + " не найден");
+        }
+    }
+
+    public Film getFilmById(int id) {
+        Film film = filmStorage.getFilmById(id);
+        if (film != null) {
+            return filmStorage.getFilmById(id);
+        } else {
+            log.error("Фильм с ID: {} не найден", id);
+            throw new NotFoundException("Фильм с ID: " + id + " не найден");
+        }
     }
 
 }

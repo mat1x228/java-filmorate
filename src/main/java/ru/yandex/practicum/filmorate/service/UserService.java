@@ -14,4 +14,12 @@ public interface UserService {
 
     List<User> getFriendsList(int userId);
 
+    User createUser(User user);
+
+    List<User> getUsers();
+
+    User updateUser(User user);
+
+    User getUserById(int id);
+
 }
