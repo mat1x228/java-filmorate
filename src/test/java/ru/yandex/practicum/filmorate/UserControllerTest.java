@@ -40,7 +40,7 @@ class UserControllerTest {
         Set<Integer> friendsSetForFirstUser = new HashSet<>();
         Set<Integer> friendsSetForSecondUser = new HashSet<>();
         user1 = new User(1, "John Doe", "john.doe@example.com", "johndoe", LocalDate.of(1990, 1, 1), friendsSetForFirstUser);
-        user2 = new User(2, "Jane Smith", "jane.smith@example.com", "janesmith", LocalDate.of(1985, 5, 15), friendsSetForSecondUser);
+        user2 = new User(2, "Jane Jane", "jane.smith@example.com", "janesmith", LocalDate.of(1985, 5, 15), friendsSetForSecondUser);
     }
 
 
