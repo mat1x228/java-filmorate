@@ -46,7 +46,7 @@ class UserControllerTest {
 
     @Test
     void getUsersTest() {
-        when(userStorage.getUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceImpl.getUsers()).thenReturn(Arrays.asList(user1, user2));
 
         Collection<User> users = userController.getUsers();
 
@@ -57,7 +57,7 @@ class UserControllerTest {
 
     @Test
     void addValidUserTest() {
-        when(userStorage.createUser(any(User.class))).thenReturn(user1);
+        when(userServiceImpl.createUser(any(User.class))).thenReturn(user1);
 
         ResponseEntity<User> responseEntity = userController.addUser(user1);
 

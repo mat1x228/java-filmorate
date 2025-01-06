@@ -25,8 +25,6 @@ import static org.mockito.Mockito.*;
 
 class FilmorateApplicationTests {
 
-    @Mock
-    private InMemoryFilmStorage filmStorage;
 
     @Mock
     private FilmServiceImpl filmService;
@@ -55,41 +53,39 @@ class FilmorateApplicationTests {
     void testGetAllFilms() {
         Film film1 = new Film(1, "Film 1", "Description 1", LocalDate.of(2022, 1, 1), 120, null);
         Film film2 = new Film(2, "Film 2", "Description 2", LocalDate.of(2022, 2, 1), 130, null);
-        when(filmStorage.getFilms()).thenReturn(Arrays.asList(film1, film2));
+        when(filmService.getFilms()).thenReturn(Arrays.asList(film1, film2));
 
         Collection<Film> result = filmController.getAllFilms();
 
         assertEquals(2, result.size());
         assertTrue(result.contains(film1));
         assertTrue(result.contains(film2));
-        verify(filmStorage, times(1)).getFilms();
+        verify(filmService, times(1)).getFilms();
     }
 
     @Test
     void testCreateFilm() {
         Film film = new Film(1, "Film 1", "Description 1", LocalDate.of(2022, 1, 1), 120, null);
-        when(filmStorage.createFilm(film)).thenReturn(film);
+        when(filmService.createFilm(film)).thenReturn(film);
 
         ResponseEntity<Film> response = filmController.createFilm(film);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(film, response.getBody());
-        verify(filmStorage, times(1)).createFilm(film);
+        verify(filmService, times(1)).createFilm(film);
     }
 
     @Test
     void testCreateFilmFailure() {
-
         Film film = new Film(1, "Film 1", "Description 1", LocalDate.of(2022, 1, 1), 120, null);
-        when(filmStorage.createFilm(film)).thenReturn(null);
+        when(filmService.createFilm(film)).thenThrow(new ValidationException("Validation failed"));
 
         assertThrows(ValidationException.class, () -> filmController.createFilm(film));
-        verify(filmStorage, times(1)).createFilm(film);
     }
 
     @Test
     void testAddLikeToFilm() {
-        when(filmStorage.getFilmById(film1.getId())).thenReturn(film1);
+        when(filmService.getFilmById(film1.getId())).thenReturn(film1);
 
         ResponseEntity<Void> response = filmController.likeFilm(1, 1);
 
@@ -98,7 +94,7 @@ class FilmorateApplicationTests {
 
     @Test
     void testRemoveLikeFromFilm() {
-        when(filmStorage.getFilmById(film1.getId())).thenReturn(film1);
+        when(filmService.getFilmById(film1.getId())).thenReturn(film1);
 
         filmController.likeFilm(1, 1);
 
@@ -109,8 +105,8 @@ class FilmorateApplicationTests {
 
     @Test
     void testGetMostPopularFilms() {
-        when(filmStorage.getFilmById(film1.getId())).thenReturn(film1);
-        when(filmStorage.getFilmById(film2.getId())).thenReturn(film2);
+        when(filmService.getFilmById(film1.getId())).thenReturn(film1);
+        when(filmService.getFilmById(film2.getId())).thenReturn(film2);
 
         ResponseEntity<Collection<Film>> response = filmController.getMostPopularFilms(1);
 
