@@ -27,7 +27,8 @@ public class User {
     @NotNull(message = "Дата рождения не может быть пустой")
     @PastOrPresent(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
-    Set<Integer> friends = new HashSet<>();
+    Set<Friendship> friendships = new HashSet<>();
+    private Set<Integer> friends = new HashSet<>();
 
     public void addFriendUser(Integer id) {
         friends.add(id);
@@ -36,7 +37,6 @@ public class User {
     public void deleteFriendUser(Integer id) {
         friends.remove(id);
     }
-
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -44,7 +44,7 @@ public class User {
                 ", login='" + login + '\'' +
                 ", name='" + name + '\'' +
                 ", birthday=" + birthday + '\'' +
-                ", friends=" + friends +
+                ", friendships=" + friendships +
                 '}';
     }
 }

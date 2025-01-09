@@ -1,11 +1,11 @@
-package ru.yandex.practicum.filmorate.storage.impl;
+package ru.yandex.practicum.filmorate.storage.user.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,14 +65,35 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUserById(int id) {
-        log.info("Получение юзера с ID: {}", id);
+    public Optional<User> getUserById(int id) {
+//        log.info("Получение юзера с ID: {}", id);
+//
+//        User user = userStorage.get(id);
+//        if (user == null) {
+//            throw new NotFoundException("Пользователь с таким id не найден");
+//        }
+//
+//        return user;
+        return null;
+    }
 
-        User user = userStorage.get(id);
-        if (user == null) {
-            throw new NotFoundException("Пользователь с таким id не найден");
-        }
+    @Override
+    public void addFriend(int userId, int userFriendId) {
 
-        return user;
+    }
+
+    @Override
+    public void removeFriend(int userId, int userFriendId) {
+
+    }
+
+    @Override
+    public List<User> getCommonFriendsList(int firstUserId, int secondUserId) {
+        return null;
+    }
+
+    @Override
+    public List<User> getFriendsList(int userId) {
+        return null;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -25,23 +26,23 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
+    public ResponseEntity<UserDto> addUser(@Valid @RequestBody User user) {
         return ResponseEntity.ok().body(userService.createUser(user));
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
+    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody User user) {
         return ResponseEntity.ok().body(userService.updateUser(user));
     }
 
 
     @GetMapping
-    public Collection<User> getUsers() {
+    public Collection<UserDto> getUsers() {
         return userService.getUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable int id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable int id) {
         return ResponseEntity.ok().body(userService.getUserById(id));
     }
 
@@ -57,13 +58,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{id}/friends")
-    public ResponseEntity<List<User>> getFriendsList(@PathVariable int id) {
+    @GetMapping("/{id}/friends")
+    public ResponseEntity<List<UserDto>> getFriendsList(@PathVariable int id) {
         return ResponseEntity.ok().body(userService.getFriendsList(id));
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public ResponseEntity<List<User>> getCommonFriendsList(@PathVariable int id, @PathVariable int otherId) {
+    public ResponseEntity<List<UserDto>> getCommonFriendsList(@PathVariable int id, @PathVariable int otherId) {
         return ResponseEntity.ok().body(userService.getCommonFriendsList(id, otherId));
     }
 

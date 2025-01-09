@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -26,23 +27,23 @@ public class FilmController {
 
 
     @GetMapping
-    public Collection<Film> getAllFilms() {
+    public Collection<FilmDto> getAllFilms() {
         return filmService.getFilms();
     }
 
     @PostMapping
-    public ResponseEntity<Film> createFilm(@Valid @RequestBody Film film) {
+    public ResponseEntity<FilmDto> createFilm(@Valid @RequestBody Film film) {
         return ResponseEntity.ok().body(filmService.createFilm(film));
     }
 
 
     @PutMapping
-    public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
+    public ResponseEntity<FilmDto> updateFilm(@Valid @RequestBody Film film) {
         return ResponseEntity.ok().body(filmService.updateFilm(film));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Film> getFilmById(@PathVariable int id) {
+    public ResponseEntity<FilmDto> getFilmById(@PathVariable int id) {
         return ResponseEntity.ok().body(filmService.getFilmById(id));
     }
 
@@ -59,7 +60,7 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<Collection<Film>> getMostPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
+    public ResponseEntity<Collection<FilmDto>> getMostPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
         if (count <= 0) {
             throw new ValidationException("Значение size должно быть больше нуля");
         }
