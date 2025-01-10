@@ -7,8 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -27,16 +25,7 @@ public class User {
     @NotNull(message = "Дата рождения не может быть пустой")
     @PastOrPresent(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
-    Set<Friendship> friendships = new HashSet<>();
-    private Set<Integer> friends = new HashSet<>();
 
-    public void addFriendUser(Integer id) {
-        friends.add(id);
-    }
-
-    public void deleteFriendUser(Integer id) {
-        friends.remove(id);
-    }
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -44,7 +33,6 @@ public class User {
                 ", login='" + login + '\'' +
                 ", name='" + name + '\'' +
                 ", birthday=" + birthday + '\'' +
-                ", friendships=" + friendships +
                 '}';
     }
 }

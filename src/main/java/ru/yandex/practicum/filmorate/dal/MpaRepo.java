@@ -12,17 +12,15 @@ import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 import java.util.Collection;
 import java.util.Optional;
 
-@Repository("mpaDbStorage")
-@Qualifier("mpaDbStorage")
+@Repository("mpaRepo")
+@Qualifier("mpaRepo")
 @Primary
-public class MpaDbStorage extends BaseRepo implements MpaStorage {
-    public MpaDbStorage(JdbcTemplate jdbc, RowMapper mapper) {
+public class MpaRepo extends BaseRepo implements MpaStorage {
+    public MpaRepo(JdbcTemplate jdbc, RowMapper mapper) {
         super(jdbc, mapper);
     }
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM mpa";
-
-    private static final String CHECK_MPA_QUERY = "SELECT COUNT(*) FROM mpa WHERE id = ?";
 
     @Override
     public Optional<Mpa> getMpaById(int id) {
@@ -33,7 +31,6 @@ public class MpaDbStorage extends BaseRepo implements MpaStorage {
     public Collection<Mpa> getAllMpa() {
         return findMany(FIND_ALL_QUERY);
     }
-
 
 
 }

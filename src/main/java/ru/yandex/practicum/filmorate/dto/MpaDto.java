@@ -7,5 +7,5 @@ import lombok.Data;
 @Builder
 public class MpaDto {
     private Integer id;
-    private String rating;
+    private String name;
 }

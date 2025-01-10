@@ -5,12 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.yandex.practicum.filmorate.annotation.validation.ReleaseDate;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -26,17 +25,8 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "Длительность не может быть отрицательной или равной нулю")
     private int duration;
-    private Set<Integer> likes = new HashSet<>();
     private List<Genre> genres;
     private Mpa mpa;
-
-    public void addLike(Integer id) {
-        likes.add(id);
-    }
-
-    public void deleteLike(Integer id) {
-        likes.remove(id);
-    }
 
     public String toString() {
         return "Film{" +
@@ -45,6 +35,8 @@ public class Film {
                 ", description='" + description + '\'' +
                 ", releaseDate=" + releaseDate +
                 ", duration=" + duration +
+                ", genres=[" + genres + "]" +
+                ", mpa=" + mpa +
                 '}';
     }
 }

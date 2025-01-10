@@ -6,9 +6,12 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 public class MpaMapper {
 
     public static MpaDto mapToMpaDto(Mpa mpa) {
+        if (mpa == null) {
+            return null;
+        }
         return MpaDto.builder()
                 .id(mpa.getId())
-                .rating(mpa.getName())
+                .name(mpa.getName())
                 .build();
     }
 }

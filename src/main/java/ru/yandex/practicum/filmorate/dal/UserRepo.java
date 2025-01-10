@@ -14,12 +14,12 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import java.util.List;
 import java.util.Optional;
 
-@Repository("userDbStorage")
-@Qualifier("userDbStorage")
+@Repository("userRepo")
+@Qualifier("userRepo")
 @Slf4j
 @Component
 @Primary
-public class UserDbStorage extends BaseRepo<User> implements UserStorage {
+public class UserRepo extends BaseRepo<User> implements UserStorage {
 
     private static final String GET_ALL_QUERY = "SELECT * FROM users";
 
@@ -40,15 +40,16 @@ public class UserDbStorage extends BaseRepo<User> implements UserStorage {
     private static final String DELETE_FRIEND_QUERY = "DELETE FROM friends WHERE userid = ? AND friendid = ?";
 
 
-    public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
+    public UserRepo(JdbcTemplate jdbc, RowMapper<User> mapper) {
         super(jdbc, mapper);
     }
 
 
     @Override
     public User createUser(User user) {
-        Long id = insert(CREATE_QUERY, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday());
-        user.setId(id.intValue());
+        System.out.println(user);
+        int id = insert(CREATE_QUERY, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday());
+        user.setId(id);
         return user;
     }
 
@@ -81,7 +82,7 @@ public class UserDbStorage extends BaseRepo<User> implements UserStorage {
 
     @Override
     public void removeFriend(int userId, int userFriendId) {
-         delete(DELETE_FRIEND_QUERY, userId, userFriendId);
+        delete(DELETE_FRIEND_QUERY, userId, userFriendId);
     }
 
     @Override

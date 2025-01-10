@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.dal.mappers;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
