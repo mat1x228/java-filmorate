@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.dal.mappers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -17,16 +19,15 @@ import java.util.Optional;
 
 
 @Component
+@RequiredArgsConstructor
 public class FilmRowMapper implements RowMapper<Film> {
 
+    @Autowired
+    @Lazy
     MpaStorage mpaDbStorage;
+    @Autowired
     GenreStorage genreDbStorage;
 
-    @Autowired
-    public FilmRowMapper(GenreStorage genreDbStorage, MpaStorage mpaDbStorage) {
-        this.mpaDbStorage = mpaDbStorage;
-        this.genreDbStorage = genreDbStorage;
-    }
 
     @Override
     public Film mapRow(ResultSet rs, int rowNum) throws SQLException {

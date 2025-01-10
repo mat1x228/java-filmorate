@@ -6,14 +6,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.storage.BaseRepo;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository("genreRepo")
-@Qualifier("genreRepo")
+@Repository
 @Primary
 public class GenreRepo extends BaseRepo<Genre> implements GenreStorage {
 

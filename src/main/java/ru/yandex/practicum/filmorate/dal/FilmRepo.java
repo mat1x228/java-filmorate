@@ -8,17 +8,16 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.storage.BaseRepo;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.util.List;
 import java.util.Optional;
 
 
-@Repository("filmRepo")
-@Qualifier("filmRepo")
+@Repository
 @Primary
 public class FilmRepo extends BaseRepo<Film> implements FilmStorage {
+
 
     private static final String GET_ALL_QUERY = "SELECT * FROM films";
     private static final String GET_BY_ID_QUERY = "SELECT * FROM films WHERE id = ?";

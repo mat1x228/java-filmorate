@@ -6,14 +6,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.storage.BaseRepo;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
 import java.util.Collection;
 import java.util.Optional;
 
-@Repository("mpaRepo")
-@Qualifier("mpaRepo")
+@Repository
 @Primary
 public class MpaRepo extends BaseRepo implements MpaStorage {
     public MpaRepo(JdbcTemplate jdbc, RowMapper mapper) {

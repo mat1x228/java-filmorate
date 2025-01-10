@@ -1,6 +1,6 @@
 # java-filmorate
 
-
+![Диаграмма](img/diagram.png)
 
 ## Описание базы данных
 
