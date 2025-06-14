@@ -53,13 +53,11 @@ public class InMemoryUserStorage implements UserStorage {
     public User updateUser(User user) {
         log.info("Обновление юзера с ID: {}", user.getId());
         if (userStorage.containsKey(user.getId()) && user.getId() > 0) {
-            Integer userId = user.getId();
-            userStorage.remove(user.getId());
-            userStorage.put(userId, user);
+            userStorage.put(user.getId(), user);
             log.info("Юзер обновлен: {}", user);
             log.trace("Имя пользователя: {}, Емайл пользователя: {}, Логин пользователя: {}, Дата рождения: {}",
                     user.getName(), user.getEmail(), user.getLogin(), user.getBirthday());
-            return userStorage.get(userId);
+            return user;
         }
         return null;
     }

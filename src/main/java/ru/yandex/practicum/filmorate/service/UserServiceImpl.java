@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserStorage userStorage;
 
     public void addFriend(int userId, int userFriendId) {
@@ -26,14 +25,20 @@ public class UserServiceImpl implements UserService {
         User user = userStorage.getUserById(userId);
         User userFriend = userStorage.getUserById(userFriendId);
 
-        if (user != null & userFriend != null) {
+        if (user != null && userFriend != null) {
             userFriend.addFriendUser(user.getId());
             log.info("Пользователь {} подружился с {}", userFriend.getId(), user.getId());
             user.addFriendUser(userFriend.getId());
             log.info("Пользователь {} подружился с {}", user.getId(), userFriend.getId());
         } else {
-            log.error("Юзер с ID: {} не найден", userId);
-            throw new NotFoundException("Юзер с ID: " + userId + " не найден");
+            if (user == null) {
+                log.error("Юзер с ID: {} не найден при добавлении друга", userId);
+                throw new NotFoundException("Юзер с ID: " + userId + " не найден");
+            }
+            if (userFriend == null) {
+                log.error("Друг с ID: {} не найден при добавлении к юзеру {}", userFriendId, userId);
+                throw new NotFoundException("Друг с ID: " + userFriendId + " не найден");
+            }
         }
 
     }
@@ -49,8 +54,14 @@ public class UserServiceImpl implements UserService {
             userFriend.deleteFriendUser(user.getId());
             log.info("Пользователь {} убрал из друзей {}", userFriend.getId(), user.getId());
         } else {
-            log.error("Юзер с ID: {} не найден", userId);
-            throw new NotFoundException("Юзер с ID: " + userId + " не найден");
+            if (user == null) {
+                log.error("Юзер с ID: {} не найден при удалении друга", userId);
+                throw new NotFoundException("Юзер с ID: " + userId + " не найден");
+            }
+            if (userFriend == null) {
+                log.error("Друг с ID: {} не найден при удалении у юзера {}", userFriendId, userId);
+                throw new NotFoundException("Друг с ID: " + userFriendId + " не найден");
+            }
         }
 
     }
@@ -60,6 +71,15 @@ public class UserServiceImpl implements UserService {
         List<User> commonFriends = new ArrayList<>();
         User firstUser = userStorage.getUserById(userId);
         User secondUser = userStorage.getUserById(friendUserId);
+
+        if (firstUser == null) {
+            log.warn("Пользователь с ID: {} не найден при поиске общих друзей.", userId);
+            throw new NotFoundException("Юзер с ID: " + userId + " не найден");
+        }
+        if (secondUser == null) {
+            log.warn("Пользователь с ID: {} не найден при поиске общих друзей.", friendUserId);
+            throw new NotFoundException("Юзер с ID: " + friendUserId + " не найден");
+        }
 
         for (Integer friendId : firstUser.getFriends()) {
             log.info("Получение списка обших друзей у юзеров {} и {}", userId, friendUserId);

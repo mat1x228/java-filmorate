@@ -19,13 +19,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FilmServiceImpl implements FilmService {
 
-    @Autowired
     private final FilmStorage filmStorage;
-    @Autowired
     private final UserStorage userStorage;
 
     public void addLike(int filmId, int userId) {
         Film film = filmStorage.getFilmById(filmId);
+        if (film == null) {
+            log.warn("Фильм с ID: {} не найден для добавления лайка", filmId);
+            throw new NotFoundException("Фильм с ID: " + filmId + " не найден");
+        }
         User user = userStorage.getUserById(userId);
 
         log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
@@ -39,6 +41,10 @@ public class FilmServiceImpl implements FilmService {
 
     public void removeLike(int filmId, int userId) {
         Film film = filmStorage.getFilmById(filmId);
+        if (film == null) {
+            log.warn("Фильм с ID: {} не найден для удаления лайка", filmId);
+            throw new NotFoundException("Фильм с ID: " + filmId + " не найден");
+        }
         User user = userStorage.getUserById(userId);
 
         log.info("Пользователь {} удалил лайк фильму {}", userId, filmId);

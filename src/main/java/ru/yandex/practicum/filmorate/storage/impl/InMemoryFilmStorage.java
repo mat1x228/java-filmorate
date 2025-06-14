@@ -32,7 +32,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         log.trace("Название фильма: {}, Описание фильма: {}, Дата выхода фильма: {}, Продолжительность фильма: {}",
                 film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration());
 
-        return filmStorage.get(filmId);
+        return film;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             filmStorage.put(film.getId(), film);
             log.trace("Название фильма: {}, Описание фильма: {}, Дата выхода фильма: {}, Продолжительность фильма: {}",
                     film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration());
-            return filmStorage.get(film.getId());
+            return film;
         } else {
             return null;
         }
@@ -63,7 +63,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             log.warn("Фильм не найден");
             throw new NotFoundException("Фильм с ID: " + id + " не найден");
         }
-        return filmStorage.get(id);
+        return film;
     }
 
 
